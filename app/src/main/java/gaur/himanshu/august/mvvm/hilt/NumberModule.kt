@@ -1,10 +1,16 @@
 package gaur.himanshu.august.mvvm.hilt
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import gaur.himanshu.august.mvvm.local.NumberRepo
+import gaur.himanshu.august.mvvm.local.room.NumberFactDao
+import gaur.himanshu.august.mvvm.local.room.NumberFactDb
+
+
 import gaur.himanshu.august.mvvm.remote.retrofit.BASE_URL
 import gaur.himanshu.august.mvvm.remote.retrofit.NumberApi
 import retrofit2.Retrofit
@@ -27,8 +33,16 @@ object NumberModule {
 
     @Provides
     @Singleton
-    fun provideRepo(numberApi: NumberApi): NumberRepo {
-        return NumberRepo(numberApi)
+    fun provideDao(@ApplicationContext context: Context):NumberFactDao{
+        return NumberFactDb.getInstance(context).getDao()
+    }
+
+
+
+    @Provides
+    @Singleton
+    fun provideRepo(numberApi: NumberApi,numberFactDao: NumberFactDao): NumberRepo {
+        return NumberRepo(numberApi,numberFactDao)
     }
 
 

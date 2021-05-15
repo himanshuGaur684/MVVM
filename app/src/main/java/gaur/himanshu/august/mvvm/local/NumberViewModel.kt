@@ -19,10 +19,19 @@ class NumberViewModel @Inject constructor(private val repo: NumberRepo) : ViewMo
     private val _fact = MutableLiveData<Events<Result<NumberResponse>>>()
     val fact: LiveData<Events<Result<NumberResponse>>> = _fact
 
+
+    private val _history = MutableLiveData<List<NumberResponse>>()
+    val history: LiveData<List<NumberResponse>> = _history
+
     fun getNumberFact(number: Int) = viewModelScope.launch {
         _fact.postValue(Events(Result(Status.LOADING, null, null)))
         _fact.postValue(Events(repo.getNumberFact(number)))
 
+    }
+
+
+    fun getAllData()=viewModelScope.launch {
+        _history.postValue(repo.getAllData())
     }
 
 
